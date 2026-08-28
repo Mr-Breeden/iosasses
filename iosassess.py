@@ -27,7 +27,7 @@ from modules.runtime_evidence import write_runtime_evidence_template
 from modules.memory_analysis import write_memory_analysis_workflows
 from modules.static_triage import run_static_triage, write_static_triage_summary
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 console = Console()
 
 
@@ -239,7 +239,7 @@ def main() -> None:
 
     metadata_out = {
         "tool": "iOSAssess",
-        "version": VERSION,
+        "tool_version": VERSION,
         "ipa_path": str(ipa_path),
         "project_dir": str(project_dir),
         "app_path": str(app_path),
@@ -260,7 +260,12 @@ def main() -> None:
     write_storage_review_reports(reports_dir / "storage_review", app_path, metadata, testing_environment)
     add_status(statuses, "Storage Review", "PASS")
 
+    write_memory_analysis_workflows(reports_dir / "memory_analysis", metadata, testing_environment)
+    add_status(statuses, "Memory Analysis Workflows", "PASS")
+
     write_runtime_templates(reports_dir / "runtime_templates", metadata)
+    write_runtime_evidence_notes(reports_dir / "runtime_templates" / "runtime_evidence_notes.txt", metadata)
+    write_runtime_evidence_template(reports_dir / "runtime_templates" / "runtime_evidence_template.txt")
     add_status(statuses, "Runtime Templates", "PASS")
 
     write_mastg_mapping(reports_dir / "mastg_mapping.txt")
